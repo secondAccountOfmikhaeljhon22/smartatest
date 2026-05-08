@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MindCheck Article</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .back,
+        .share {
+            border-radius: 999px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back {
+            border: 1px solid #22c55e;
+            color: #22c55e;
+            background: transparent;
+        }
+
+        .share {
+            background: #22c55e;
+            border: none;
+            color: white;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 750px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* TITLE */
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* META */
+        .meta {
+            font-size: 14px;
+            color: #6b7280;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        /* XP BADGE */
+        .xp-badge {
+            font-size: 13px;
+            color: #16a34a;
+            opacity: 0;
+            transition: 0.3s;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ARTICLE */
+        .article {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            font-size: 18px;
+            line-height: 1.85;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* SHARE MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            width: 360px;
+        }
+
+        .box input {
+            width: 100%;
+            padding: 9px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .copy {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .close {
+            background: #e5e7eb;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <button class="back">
+            <i class="fa fa-arrow-left"></i> Kembali
+        </button>
+
+        <button class="share" onclick="openShare()">
+            <i class="fa fa-share"></i> Share
+        </button>
+    </div>
+
+    <div class="container">
+
+        <div class="title">
+            Cara Mengelola Stres di Era Modern
+        </div>
+
+        <div class="meta">
+            <span><i class="fa fa-user-doctor"></i> Dr. Ratna Dewi, Sp.KJ</span>
+            <span><i class="fa fa-eye"></i> 12.548 tayangan</span>
+            <span><i class="fa fa-clock"></i> 29 April 2026</span>
+        </div>
+
+        <!-- XP BADGE -->
+        <div class="xp-badge" id="xpBadge">
+            <i class="fa fa-bolt"></i>
+            <span id="xpText"></span>
+        </div>
+
+        <div class="article">
+
+            <h3>1. Pengantar</h3>
+            <p>
+                Stres merupakan respons alami tubuh terhadap tekanan psikologis, sosial, maupun lingkungan.
+            </p>
+
+            <h3>2. Dampak Stres</h3>
+            <p>
+                Stres yang tidak dikelola dapat memicu gangguan tidur, kecemasan, dan penurunan fokus.
+            </p>
+
+            <h3>3. Strategi Mengelola Stres</h3>
+            <p>
+                Teknik pernapasan, olahraga ringan, dan mindfulness sangat membantu menstabilkan emosi.
+            </p>
+
+            <h3>4. Rutinitas Sehat</h3>
+            <p>
+                Tidur cukup dan pola hidup teratur adalah fondasi utama kesehatan mental.
+            </p>
+
+            <h3>5. Kesimpulan</h3>
+            <p>
+                Mengelola stres adalah tentang konsistensi dan adaptasi terhadap tekanan hidup.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- SHARE MODAL -->
+    <div class="modal" id="modal">
+        <div class="box">
+            <b>Share Artikel</b>
+
+            <input id="link" readonly>
+
+            <div class="actions">
+                <button class="copy" onclick="copyLink()">
+                    <i class="fa fa-copy"></i> Copy
+                </button>
+
+                <button class="close" onclick="closeShare()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        /* =====================
+           SHARE LINK FIXED
+        ===================== */
+        const slug = "cara-mengelola-stres-di-era-modern";
+        const shareURL = `https://mindcheck.co.id/article/${slug}`;
+
+        document.getElementById("link").value = shareURL;
+
+        /* MODAL */
+        function openShare() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeShare() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(shareURL);
+            showXP(15);
+        }
+
+        /* =====================
+           XP BADGE SYSTEM
+        ===================== */
+
+        let xp = 0;
+
+        function showXP(amount) {
+            const badge = document.getElementById("xpBadge");
+            document.getElementById("xpText").innerText = `XP +${amount}`;
+
+            badge.style.opacity = "1";
+
+            setTimeout(() => {
+                badge.style.opacity = "0";
+            }, 1000);
+        }
+
+        /* =====================
+           4 DETIK AUTO REWARD
+        ===================== */
+        setTimeout(() => {
+
+            const gain = 15;
+
+            showXP(gain);
+
+            let step = 0;
+            const steps = 25;
+
+            const interval = setInterval(() => {
+
+                step++;
+
+                xp += gain / steps;
+
+                if (step >= steps) {
+                    clearInterval(interval);
+                }
+
+            }, 40);
+
+        }, 4000);
+
+    </script>
+
+</body>
+
+</html>
