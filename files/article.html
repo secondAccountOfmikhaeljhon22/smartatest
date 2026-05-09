@@ -14,7 +14,6 @@
             background: #f3f4f6;
         }
 
-        /* TOPBAR */
         .topbar {
             position: sticky;
             top: 0;
@@ -49,21 +48,18 @@
             color: white;
         }
 
-        /* CONTAINER */
         .container {
             max-width: 750px;
             margin: auto;
             padding: 20px;
         }
 
-        /* TITLE */
         .title {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 10px;
         }
 
-        /* META */
         .meta {
             font-size: 14px;
             color: #6b7280;
@@ -73,7 +69,6 @@
             margin-bottom: 6px;
         }
 
-        /* XP BADGE */
         .xp-badge {
             font-size: 13px;
             color: #16a34a;
@@ -85,7 +80,6 @@
             gap: 6px;
         }
 
-        /* ARTICLE */
         .article {
             background: white;
             padding: 28px;
@@ -95,7 +89,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
 
-        /* SHARE MODAL */
         .modal {
             position: fixed;
             inset: 0;
@@ -147,7 +140,9 @@
 
     <div class="topbar">
         <button class="back">
-            <i class="fa fa-arrow-left"></i> Kembali
+            <a href="index.html">
+                <i class="fa fa-arrow-left"></i> Kembali
+            </a>
         </button>
 
         <button class="share" onclick="openShare()">
@@ -167,7 +162,7 @@
             <span><i class="fa fa-clock"></i> 29 April 2026</span>
         </div>
 
-        <!-- XP BADGE -->
+        
         <div class="xp-badge" id="xpBadge">
             <i class="fa fa-bolt"></i>
             <span id="xpText"></span>
@@ -204,7 +199,7 @@
 
     </div>
 
-    <!-- SHARE MODAL -->
+    
     <div class="modal" id="modal">
         <div class="box">
             <b>Share Artikel</b>
@@ -225,15 +220,11 @@
 
     <script>
 
-        /* =====================
-           SHARE LINK FIXED
-        ===================== */
         const slug = "cara-mengelola-stres-di-era-modern";
         const shareURL = `https://mindcheck.co.id/article/${slug}`;
 
         document.getElementById("link").value = shareURL;
 
-        /* MODAL */
         function openShare() {
             document.getElementById("modal").style.display = "flex";
         }
@@ -246,10 +237,6 @@
             navigator.clipboard.writeText(shareURL);
             showXP(15);
         }
-
-        /* =====================
-           XP BADGE SYSTEM
-        ===================== */
 
         let xp = 0;
 
@@ -264,9 +251,6 @@
             }, 1000);
         }
 
-        /* =====================
-           4 DETIK AUTO REWARD
-        ===================== */
         setTimeout(() => {
 
             const gain = 15;

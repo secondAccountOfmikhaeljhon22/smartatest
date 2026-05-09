@@ -62,7 +62,6 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* HEADER */
         .chat-header {
             padding: 12px 1.2rem;
             display: flex;
@@ -123,7 +122,6 @@
             background: currentColor;
         }
 
-        /* MESSAGES */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -191,7 +189,6 @@
             margin: 10px 0;
         }
 
-        /* INPUT */
         .chat-input-bar {
             padding: 15px;
             display: flex;
@@ -229,7 +226,6 @@
             background: var(--green-dark);
         }
 
-        /* DEBUG PANEL */
         .debug-panel {
             background: #000;
             color: #0f0;
@@ -276,7 +272,7 @@
         <div class="debug-panel" id="debugPanel"></div>
 
         <div class="chat-messages" id="chatMessagesContainer">
-            <!-- Pesan akan muncul di sini -->
+
         </div>
 
         <div class="chat-input-bar">
@@ -286,226 +282,216 @@
             </button>
         </div>
     </div>
- <script>
-    // ================= CONFIG =================
-    const WS_URL = 'ws://localhost:5050/ws';
+    <script>
+        const WS_URL = 'ws://localhost:5050/ws';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const doctorId = urlParams.get('dokter');
+        const urlParams = new URLSearchParams(window.location.search);
+        const doctorId = urlParams.get('dokter');
 
-    const allDoctors = JSON.parse(localStorage.getItem('mindcheck_all_doctors') || '[]');
-    const doctor = allDoctors.find(d => d.id == doctorId);
+        const allDoctors = JSON.parse(localStorage.getItem('mindcheck_all_doctors') || '[]');
+        const doctor = allDoctors.find(d => d.id == doctorId);
 
-    const PATIENT_DATA = {
-        id: 1,
-        name: "Andriani Patani",
-        avatar: "👤",
-        color: "linear-gradient(135deg, #6366f1, #a855f7)"
-    };
-
-    let ws = null;
-
-    // ================= DEDUP SYSTEM (TETAP) =================
-    const processedMessageIds = new Set();
-
-    function generateMessageId(payload, direction = 'in') {
-        const base = payload?.messageId
-            || payload?.id
-            || payload?.timestamp
-            || payload?.data?.timestamp
-            || (payload?.text || payload?.message || '') + direction;
-
-        return btoa(unescape(encodeURIComponent(String(base))));
-    }
-
-    function isSystemMessage(text = '') {
-        const lower = text.toLowerCase();
-        return [
-            'connected',
-            'disconnected',
-            'client',
-            'joined',
-            'left',
-            'subscribed',
-            'message received',
-            'ws:',
-            'room'
-        ].some(k => lower.includes(k));
-    }
-
-    // ================= INIT (FIXED) =================
-    function init() {
-        document.getElementById('patientName').textContent = PATIENT_DATA.name;
-        document.getElementById('patientAvatar').style.background = PATIENT_DATA.color;
-
-        // status awal yang benar
-        updateWsUI('offline', 'Offline');
-
-        initWebSocket();
-
-        document.getElementById('chatInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSendMessage();
-        });
-    }
-
-    // ================= WEBSOCKET (FIX STATUS FIXED) =================
-    function initWebSocket() {
-        ws = new WebSocket(WS_URL);
-
-        updateWsUI('offline', 'Menghubungkan...');
-
-        ws.onopen = () => {
-            updateWsUI('connected', 'Online');
-
-            ws.send(JSON.stringify({
-                type: 'join',
-                senderRole: 'doctor',
-                patientId: PATIENT_DATA.id
-            }));
+        const PATIENT_DATA = {
+            id: 1,
+            name: "Andriani Patani",
+            avatar: "👤",
+            color: "linear-gradient(135deg, #6366f1, #a855f7)"
         };
 
-        ws.onclose = () => {
+        let ws = null;
+
+        const processedMessageIds = new Set();
+
+        function generateMessageId(payload, direction = 'in') {
+            const base = payload?.messageId
+                || payload?.id
+                || payload?.timestamp
+                || payload?.data?.timestamp
+                || (payload?.text || payload?.message || '') + direction;
+
+            return btoa(unescape(encodeURIComponent(String(base))));
+        }
+
+        function isSystemMessage(text = '') {
+            const lower = text.toLowerCase();
+            return [
+                'connected',
+                'disconnected',
+                'client',
+                'joined',
+                'left',
+                'subscribed',
+                'message received',
+                'ws:',
+                'room'
+            ].some(k => lower.includes(k));
+        }
+
+        function init() {
+            document.getElementById('patientName').textContent = PATIENT_DATA.name;
+            document.getElementById('patientAvatar').style.background = PATIENT_DATA.color;
+
             updateWsUI('offline', 'Offline');
-            setTimeout(initWebSocket, 3000);
-        };
 
-        ws.onerror = () => {
-            updateWsUI('offline', 'Error');
-        };
+            initWebSocket();
 
-        ws.onmessage = (event) => {
-            let data = event.data;
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSendMessage();
+            });
+        }
 
-            try {
-                if (typeof data === 'string') {
-                    data = JSON.parse(data);
+        function initWebSocket() {
+            ws = new WebSocket(WS_URL);
+
+            updateWsUI('offline', 'Menghubungkan...');
+
+            ws.onopen = () => {
+                updateWsUI('connected', 'Online');
+
+                ws.send(JSON.stringify({
+                    type: 'join',
+                    senderRole: 'doctor',
+                    patientId: PATIENT_DATA.id
+                }));
+            };
+
+            ws.onclose = () => {
+                updateWsUI('offline', 'Offline');
+                setTimeout(initWebSocket, 3000);
+            };
+
+            ws.onerror = () => {
+                updateWsUI('offline', 'Error');
+            };
+
+            ws.onmessage = (event) => {
+                let data = event.data;
+
+                try {
                     if (typeof data === 'string') {
                         data = JSON.parse(data);
+                        if (typeof data === 'string') {
+                            data = JSON.parse(data);
+                        }
                     }
+                } catch {
+                    data = { text: event.data };
                 }
-            } catch {
-                data = { text: event.data };
+
+                processIncomingPayload(data);
+            };
+        }
+
+        function updateWsUI(state, label) {
+            const el = document.getElementById('wsIndicator');
+            const lb = document.getElementById('wsLabel');
+            const status = document.getElementById('patientStatus');
+
+            el.className = 'ws-indicator ' + state;
+            lb.textContent = label;
+
+            if (status) status.textContent = label;
+        }
+
+        function processIncomingPayload(data) {
+            let text =
+                data?.data?.data?.text ||
+                data?.data?.text ||
+                data?.message ||
+                data?.text;
+
+            if (!text) return;
+
+            if (isSystemMessage(text)) return;
+
+            const messageId =
+                data?.data?.data?.messageId ||
+                data?.data?.messageId ||
+                data?.messageId;
+
+            if (messageId) {
+                if (processedMessageIds.has(messageId)) return;
+                processedMessageIds.add(messageId);
+            } else {
+                if (processedMessageIds.has(text)) return;
+                processedMessageIds.add(text);
             }
 
-            processIncomingPayload(data);
-        };
-    }
+            addMessageToUI('received', text);
+        }
 
-    // ================= STATUS UI FIX =================
-    function updateWsUI(state, label) {
-        const el = document.getElementById('wsIndicator');
-        const lb = document.getElementById('wsLabel');
-        const status = document.getElementById('patientStatus');
+        function handleSendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
 
-        el.className = 'ws-indicator ' + state;
-        lb.textContent = label;
+            const timestamp = Date.now();
+            const messageId = generateMessageId({ text, timestamp }, 'out');
 
-        // 🔥 ini yang sebelumnya hilang
-        if (status) status.textContent = label;
-    }
-
-    // ================= RECEIVE (TIDAK DIUBAH) =================
-    function processIncomingPayload(data) {
-        let text =
-            data?.data?.data?.text ||
-            data?.data?.text ||
-            data?.message ||
-            data?.text;
-
-        if (!text) return;
-
-        if (isSystemMessage(text)) return;
-
-        const messageId =
-            data?.data?.data?.messageId ||
-            data?.data?.messageId ||
-            data?.messageId;
-
-        if (messageId) {
-            if (processedMessageIds.has(messageId)) return;
             processedMessageIds.add(messageId);
-        } else {
-            if (processedMessageIds.has(text)) return;
-            processedMessageIds.add(text);
-        }
 
-        addMessageToUI('received', text);
-    }
+            addMessageToUI('sent', text);
 
-    // ================= SEND (TIDAK DIUBAH) =================
-    function handleSendMessage() {
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        const timestamp = Date.now();
-        const messageId = generateMessageId({ text, timestamp }, 'out');
-
-        processedMessageIds.add(messageId);
-
-        addMessageToUI('sent', text);
-
-        const payload = {
-            type: 'chat',
-            senderRole: 'doctor',
-            senderId: 'self',
-            patientId: PATIENT_DATA.id,
-            messageId,
-            message: text,
-            timestamp,
-            data: {
-                text,
+            const payload = {
+                type: 'chat',
+                senderRole: 'doctor',
                 senderId: 'self',
-                senderName: 'Doctor'
-            }
-        };
+                patientId: PATIENT_DATA.id,
+                messageId,
+                message: text,
+                timestamp,
+                data: {
+                    text,
+                    senderId: 'self',
+                    senderName: 'Doctor'
+                }
+            };
 
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify(payload));
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify(payload));
+            }
+
+            sendViaHttp(text, timestamp);
+
+            input.value = '';
+            input.focus();
         }
 
-        sendViaHttp(text, timestamp);
+        async function sendViaHttp(text, timestamp) {
+            try {
+                await fetch('http://localhost:5050/send-notif', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'chat',
+                        event: 'new_message',
+                        message: text,
+                        data: {
+                            senderId: 'doctor',
+                            patientId: PATIENT_DATA.id,
+                            text,
+                            timestamp
+                        }
+                    })
+                });
+            } catch (e) { }
+        }
 
-        input.value = '';
-        input.focus();
-    }
-
-    async function sendViaHttp(text, timestamp) {
-        try {
-            await fetch('http://localhost:5050/send-notif', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'chat',
-                    event: 'new_message',
-                    message: text,
-                    data: {
-                        senderId: 'doctor',
-                        patientId: PATIENT_DATA.id,
-                        text,
-                        timestamp
-                    }
-                })
+        function addMessageToUI(type, text) {
+            const container = document.getElementById('chatMessagesContainer');
+            const time = new Date().toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
             });
-        } catch (e) { }
-    }
 
-    // ================= UI (TIDAK DIUBAH) =================
-    function addMessageToUI(type, text) {
-        const container = document.getElementById('chatMessagesContainer');
-        const time = new Date().toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const html = `
+            const html = `
         <div class="msg-row ${type}">
             ${type === 'received'
-                ? `<div class="chat-avatar" style="width:30px;height:30px;font-size:0.8rem;background:${PATIENT_DATA.color}">
+                    ? `<div class="chat-avatar" style="width:30px;height:30px;font-size:0.8rem;background:${PATIENT_DATA.color}">
                         ${PATIENT_DATA.avatar}
-                   </div>`
-                : ''
-            }
+                    </div>`
+                    : ''
+                }
             <div>
                 <div class="msg-bubble">${escapeHtml(text)}</div>
                 <div class="msg-time">${time}</div>
@@ -513,18 +499,18 @@
         </div>
         `;
 
-        container.insertAdjacentHTML('beforeend', html);
-        container.scrollTop = container.scrollHeight;
-    }
+            container.insertAdjacentHTML('beforeend', html);
+            container.scrollTop = container.scrollHeight;
+        }
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
-    init();
-</script>
+        init();
+    </script>
 </body>
 
 </html>

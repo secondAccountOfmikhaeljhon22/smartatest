@@ -1350,22 +1350,22 @@
         </a>
 
         <div class="nav-menu">
-            <a href="#" class="nav-link">
+            <a href="index.html" class="nav-link">
                 <i class="fa-solid fa-home"></i>
                 <span>Home</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="maps.html" class="nav-link">
                 <i class="fa-solid fa-user-doctor"></i>
                 <span>Cari Tenaga Ahli</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="article.html" class="nav-link">
                 <i class="fa-solid fa-newspaper"></i>
                 <span>Artikel</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="profiles.html" class="nav-link">
                 <i class="fa-solid fa-gamepad"></i>
                 <span>Game</span>
             </a>
@@ -1418,7 +1418,6 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== DATA DOKTER ====================
         const allDoctors = [
             { id: 1, name: 'Dr. Ratna Dewi, Sp.KJ', type: 'psikiater', spesialis: 'Psikiater', subSpesialis: 'Depresi & Kecemasan', city: 'Jakarta Pusat', distance: 2.3, rating: 4.9, reviewCount: 128, online: true, schedule: ['Senin', 'Rabu', 'Jumat'], timeSlots: ['09:00', '10:00', '13:00', '15:00', '16:30'], avatarBg: 'linear-gradient(135deg,#4f46e5,#7c3aed)', avatarIcon: '👩‍⚕️', price: 'Rp 250.000 - 400.000', pengalaman: '12 tahun', alumni: 'Universitas Indonesia' },
             { id: 2, name: 'Dr. Ahmad Fauzi, M.Psi', type: 'psikolog', spesialis: 'Psikolog Klinis', subSpesialis: 'Terapi CBT & Trauma', city: 'Jakarta Selatan', distance: 3.8, rating: 4.8, reviewCount: 96, online: true, schedule: ['Selasa', 'Kamis', 'Sabtu'], timeSlots: ['08:30', '10:30', '14:00', '16:00', '19:00'], avatarBg: 'linear-gradient(135deg,#059669,#10b981)', avatarIcon: '🧑‍⚕️', price: 'Rp 200.000 - 350.000', pengalaman: '8 tahun', alumni: 'Universitas Gadjah Mada' },
@@ -1430,11 +1429,9 @@
             { id: 8, name: 'Nurul Hidayah, M.Psi', type: 'psikolog', spesialis: 'Psikolog', subSpesialis: 'Konseling Remaja & Dewasa Muda', city: 'Depok', distance: 3.2, rating: 4.6, reviewCount: 61, online: false, schedule: ['Rabu', 'Jumat', 'Minggu'], timeSlots: ['09:00', '11:00', '14:00', '16:00'], avatarBg: 'linear-gradient(135deg,#be185d,#ec4899)', avatarIcon: '👩‍⚕️', price: 'Rp 160.000 - 280.000', pengalaman: '7 tahun', alumni: 'Universitas Indonesia' }
         ];
 
-        // ==================== STATE ====================
         let mmState = 'idle', selectedPreference = null, matchedDoctors = [];
         let currentChatDoctor = null, chatMessages = [], currentScheduleDoctor = null;
 
-        // ==================== UTILS ====================
         const sleep = ms => new Promise(r => setTimeout(r, ms));
 
         function showToast(msg, type = '') {
@@ -1470,7 +1467,6 @@
             document.body.style.overflow = '';
         }
 
-        // ==================== MATCHMAKING ====================
         function openMatchmaking() {
             mmState = 'preference';
             selectedPreference = null;
@@ -1512,7 +1508,6 @@
             if (steps.length > 0) steps[steps.length - 1].classList.add('done');
             await sleep(400);
 
-            // ✅ BACA DARI LOCALSTORAGE
             const testHistory = JSON.parse(localStorage.getItem('mindcheck_tests')) || [];
             const lastTest = testHistory.length > 0 ? testHistory[0] : null;
 
@@ -1544,7 +1539,6 @@
                     const targetType = needsPsychiatrist ? 'psikiater' : 'psikolog';
                     filtered = allDoctors.filter(d => d.type === targetType);
 
-                    // Tentukan emoji dan warna level
                     let levelEmoji, levelColor, levelLabel;
                     if (lastTest.totalScore >= 80) {
                         levelEmoji = '🆘'; levelColor = '#dc2626'; levelLabel = 'Krisis';
@@ -1558,12 +1552,10 @@
                         levelEmoji = '✅'; levelColor = '#10b981'; levelLabel = 'Rendah';
                     }
 
-                    // Simpan untuk render
                     window._mmLevelColor = levelColor;
                     window._mmLevelEmoji = levelEmoji;
                     window._mmLevelLabel = levelLabel;
 
-                    // Bangun gejala tags
                     let gejalaHtml = '';
                     const validSymptoms = (lastTest.detectedSymptoms || []).filter(s => s && !s.includes('Tidak ada'));
                     if (validSymptoms.length > 0) {
@@ -1677,7 +1669,6 @@
     </div>`;
         }
 
-        // ==================== SCHEDULE ====================
         function openScheduleForDoctor(doctorId) {
             const doctor = allDoctors.find(d => d.id === doctorId);
             if (!doctor) return;
@@ -1728,8 +1719,6 @@
             setTimeout(() => { closeSchedule(); if (mmState === 'results') closeMatchmaking(); }, 1500);
         }
 
-        // ==================== CHAT ====================
-        // ==================== CHAT ====================
         function openChatForDoctor(doctorId) {
             const doctor = allDoctors.find(d => d.id === doctorId);
             if (!doctor) return;
@@ -1745,11 +1734,11 @@
             <h4>${doctor.name}</h4>
             <span>${doctor.online ? '🟢 Online' : '⚫ Offline'} · ${doctor.spesialis}</span>
         </div>
-        <!-- TOMBOL BARU: Buka Chat Penuh -->
+        
         <button onclick="openFullChat('${doctor.id}')" title="Buka Chat Penuh" style="margin-right:8px;background:var(--green-light);color:var(--green-dark);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">
             <i class="fa-solid fa-expand"></i>
         </button>
-        <!-- Akhir Tombol Baru -->
+        
         <button style="width:32px;height:32px;border-radius:50%;background:var(--gray-light);display:flex;align-items:center;just-content:center;" onclick="closeChat()">
             <i class="fa-solid fa-times"></i>
         </button>
@@ -1761,10 +1750,8 @@
             setTimeout(() => document.getElementById('chatInput')?.focus(), 400);
         }
         function openFullChat(doctorId) {
-            // Simpan data dokter ke localStorage sebelum buka halaman baru
             localStorage.setItem('mindcheck_all_doctors', JSON.stringify(allDoctors));
             localStorage.setItem('mindcheck_active_chat_doctor', doctorId);
-            // Buka halaman chat dengan parameter dokter
             window.open(`chat.html?dokter=${doctorId}`, '_blank');
         }
         function closeChat() { currentChatDoctor = null; chatMessages = []; closeModal('chatModal', 'chatOverlay'); }
@@ -1795,7 +1782,6 @@
             input.disabled = false; input.focus();
         }
 
-        // ==================== DOKTER GRID ====================
         function renderDokterGrid() {
             const grid = document.getElementById('dokterGrid');
             if (!grid) return;
@@ -1810,12 +1796,10 @@
     </div>`).join('');
         }
 
-        // ==================== OVERLAY CLICKS ====================
         document.getElementById('mmOverlay').addEventListener('click', function (e) { if (e.target === this) closeMatchmaking(); });
         document.getElementById('scheduleOverlay').addEventListener('click', function (e) { if (e.target === this) closeSchedule(); });
         document.getElementById('chatOverlay').addEventListener('click', function (e) { if (e.target === this) closeChat(); });
 
-        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', function () {
             renderDokterGrid();
             console.log('🧠 MindCheck Indonesia — Matchmaking Ready');

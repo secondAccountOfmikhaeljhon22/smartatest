@@ -21,7 +21,7 @@
     </a>
 
     <div class="nav-menu">
-      <a href="#" class="nav-link">
+      <a href="index.html" class="nav-link">
         <i class="fa-solid fa-home"></i>
         <span>Home</span>
       </a>
@@ -31,12 +31,12 @@
         <span>Cari Tenaga Ahli</span>
       </a>
 
-      <a href="#" class="nav-link">
+      <a href="article.html" class="nav-link">
         <i class="fa-solid fa-newspaper"></i>
         <span>Artikel</span>
       </a>
 
-      <a href="#" class="nav-link">
+      <a href="profiles.html" class="nav-link">
         <i class="fa-solid fa-gamepad"></i>
         <span>Game</span>
       </a>
@@ -46,13 +46,22 @@
       <i class="fa-solid fa-bell nav-bell"></i>
       <div class="badge" id="main-badge">0</div>
 
-      <!-- AUTH BUTTONS -->
-      <button class="btn-login" onclick="openModal('login')">Masuk</button>
-      <button class="btn-register" onclick="openModal('register')">Daftar</button>
+      
+      <div class="nav-guest" id="nav-guest">
+        <button class="btn-login" onclick="openModal('login')">Masuk</button>
+        <button class="btn-register" onclick="openModal('register')">Daftar</button>
+      </div>
+
+      <div class="nav-user hidden" id="nav-user">
+        <button class="profile-btn" onclick="toggleSidebar()">
+          <span class="avatar" id="navAvatar">A</span>
+          <span id="navName">User</span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- ========== SIDEBAR (Menu Samping) ========== -->
+  
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -79,12 +88,12 @@
     </div>
   </div>
 
-  <!-- ========== MODAL LOGIN ========== -->
+  
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
   <div class="modal" id="authModal">
     <button class="modal-close" onclick="closeModal()"><i class="fa fa-times"></i></button>
 
-    <!-- LOGIN FORM -->
+    
     <div id="loginForm" class="auth-form">
       <div class="auth-header">
         <span class="logo-icon">🧠</span>
@@ -109,7 +118,7 @@
       <button class="btn-social"><i class="fab fa-google"></i> Lanjut dengan Google</button>
     </div>
 
-    <!-- REGISTER FORM -->
+    
     <div id="registerForm" class="auth-form hidden">
       <div class="auth-header">
         <span class="logo-icon">🧠</span>
@@ -143,12 +152,12 @@
     </div>
   </div>
 
-  <!-- ========== TOAST NOTIF ========== -->
+  
   <div class="toast" id="toast"></div>
 
-  <!-- ========== HALAMAN: HOME ========== -->
+  
   <div class="page" id="page-home">
-    <!-- Hero Section -->
+    
     <section class="hero">
       <div class="hero-content">
         <div class="hero-badge">Platform Kesehatan Mental di Indonesia</div>
@@ -176,7 +185,7 @@
       </div>
     </section>
 
-    <!-- MATCHMAKING MODAL -->
+    
     <div class="modal-overlay" id="matchmakingOverlay" onclick="closeMatchmaking()"></div>
     <div class="modal" id="matchmakingModal" style="width:520px;padding:0;overflow:hidden;border-radius:24px;">
       <div class="mm-modal-header">
@@ -187,7 +196,7 @@
         <button class="modal-close" onclick="closeMatchmaking()"><i class="fa fa-times"></i></button>
       </div>
 
-      <!-- Loading -->
+      
       <div id="mmLoading" class="mm-loading">
         <div class="mm-loading-anim">
           <div class="mm-pulse"></div>
@@ -201,7 +210,7 @@
         </div>
       </div>
 
-      <!-- Result -->
+      
       <div id="mmResult" class="mm-result hidden">
         <div id="mmResultContent"></div>
         <div class="mm-footer">
@@ -214,7 +223,7 @@
       </div>
     </div>
 
-    <!-- Ulasan Section -->
+    
     <section class="section-articles">
       <h2 class="section-title">Artikel Kesehatan Mental</h2>
       <div class="articles-grid">
@@ -265,7 +274,7 @@
       </div>
     </section>
 
-    <!-- Dokter Section -->
+    
     <section class="section-dokter">
       <h2 class="section-title">Dokter & Psikolog</h2>
 
@@ -299,7 +308,7 @@
         </div>
       </div>
 
-      <!-- Lihat Semua (dipisah dari grid biar layout aman) -->
+      
       <div class="lihat-semua-wrapper">
         <button class="lihat-semua-btn" onclick="showPage('all-dokter')">
           <span>Lihat Semua Tenaga Ahli</span>
@@ -308,7 +317,7 @@
 
     </section>
 
-    <!-- ========== HALAMAN: HISTORY ========== -->
+    
     <div class="page hidden" id="page-history">
       <div class="inner-page">
         <div class="page-header">
@@ -324,7 +333,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: SETTINGS ========== -->
+    
     <div class="page hidden" id="page-settings">
       <div class="inner-page">
         <div class="page-header">
@@ -373,7 +382,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: PROFILE ========== -->
+    
     <div class="page hidden" id="page-profile-page">
       <div class="inner-page">
         <div class="page-header">
@@ -393,7 +402,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: ARTICLES ========== -->
+    
     <div class="page hidden" id="page-articles">
       <div class="inner-page">
         <div class="page-header">
@@ -466,7 +475,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: DOKTER ========== -->
+    
     <div class="page hidden" id="page-dokter">
       <div class="inner-page">
         <div class="page-header">
@@ -509,7 +518,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: TENTANG ========== -->
+    
     <div class="page hidden" id="page-tentang">
       <div class="inner-page">
         <div class="page-header">
@@ -541,11 +550,11 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: TES MENTAL ========== -->
+    
     <div class="page hidden" id="page-tes">
       <div class="tes-wrap">
 
-        <!-- STEP 0: Landing Tes -->
+        
         <div class="tes-step" id="tes-step-0">
           <div class="tes-landing">
             <div class="tes-landing-icon">🧩</div>
@@ -563,7 +572,7 @@
           </div>
         </div>
 
-        <!-- STEP 1–N: Pertanyaan -->
+        
         <div class="tes-step hidden" id="tes-step-questions">
           <div class="tes-progress-bar-wrap">
             <div class="tes-progress-bar" id="tesProgressBar"></div>
@@ -571,7 +580,7 @@
           <div class="tes-step-label" id="tesStepLabel">Pertanyaan 1 dari 8</div>
 
           <div class="tes-question-card" id="tesQuestionCard">
-            <!-- Diisi oleh JS -->
+            
           </div>
 
           <div class="tes-nav-btns">
@@ -580,17 +589,17 @@
           </div>
         </div>
 
-        <!-- STEP HASIL -->
+        
         <div class="tes-step hidden" id="tes-step-hasil">
           <div class="tes-hasil-wrap" id="tesHasilWrap">
-            <!-- Diisi oleh JS -->
+            
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- ========== HALAMAN: JADWAL ========== -->
+    
     <div class="page hidden" id="page-jadwal">
       <div class="inner-page">
         <div class="page-header">
@@ -598,7 +607,7 @@
           <h2>📅 Jadwal Konsultasi</h2>
         </div>
 
-        <!-- Tab: Pasien vs Dokter (simulasi mode) -->
+        
         <div class="jadwal-mode-bar">
           <button class="jmode active" id="jmodeUser" onclick="setJadwalMode('user', this)">
             <i class="fa fa-user"></i> Sebagai Pasien
@@ -608,7 +617,7 @@
           </button>
         </div>
 
-        <!-- ===== MODE PASIEN ===== -->
+        
         <div id="jadwal-user-view">
           <div class="jadwal-booking-card">
             <h3>🩺 Buat Jadwal Konsultasi Baru</h3>
@@ -663,14 +672,14 @@
             </button>
           </div>
 
-          <!-- Daftar Jadwal User -->
+          
           <div class="jadwal-list-section">
             <h3>📋 Jadwal Kamu</h3>
             <div id="userJadwalList"></div>
           </div>
         </div>
 
-        <!-- ===== MODE DOKTER (Simulasi) ===== -->
+        
         <div id="jadwal-dokter-view" class="hidden">
           <div class="dokter-mode-banner">
             <span>🩺</span>
@@ -684,7 +693,7 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: REKOMENDASI ========== -->
+    
     <div class="page hidden" id="page-rekomendasi">
       <div class="inner-page">
         <div class="page-header">
@@ -704,16 +713,16 @@
         </div>
 
         <div id="rekomendasiContent">
-          <!-- Diisi JS -->
+          
         </div>
       </div>
     </div>
 
-    <!-- ========== HALAMAN: CHAT ========== -->
+    
     <div class="page hidden" id="page-chat">
       <div class="chat-layout">
 
-        <!-- Panel Kiri: List chat -->
+        
         <div class="chat-sidebar" id="chatSidebar">
           <div class="chat-sidebar-header">
             <h3>💬 Pesan</h3>
@@ -726,14 +735,14 @@
             <input type="text" placeholder="Cari percakapan..." oninput="filterChat(this.value)" />
           </div>
           <div class="chat-list" id="chatList">
-            <!-- Diisi JS -->
+            
           </div>
         </div>
 
-        <!-- Panel Kanan: Area Chat -->
+        
         <div class="chat-main" id="chatMain">
 
-          <!-- Empty state -->
+          
           <div class="chat-empty" id="chatEmpty">
             <span>💬</span>
             <h3>Pilih Percakapan</h3>
@@ -741,9 +750,9 @@
             <button class="btn-start-chat" onclick="showNewChatModal()">Mulai Chat Baru</button>
           </div>
 
-          <!-- Area chat aktif -->
+          
           <div class="chat-active hidden" id="chatActive">
-            <!-- Header -->
+            
             <div class="chat-header" id="chatHeader">
               <button class="chat-back-btn" onclick="closeChatActive()"><i class="fa fa-arrow-left"></i></button>
               <div class="chat-header-avatar" id="chatHeaderAvatar"></div>
@@ -758,10 +767,10 @@
               </div>
             </div>
 
-            <!-- Messages -->
+            
             <div class="chat-messages" id="chatMessages"></div>
 
-            <!-- Input -->
+            
             <div class="chat-input-bar">
               <button class="chat-attach" title="Lampiran"><i class="fa fa-paperclip"></i></button>
               <input type="text" id="chatInput" placeholder="Ketik pesan..." onkeydown="handleChatKey(event)" />
@@ -773,7 +782,7 @@
       </div>
     </div>
 
-    <!-- Modal New Chat -->
+    
     <div class="modal-overlay" id="newChatOverlay" onclick="closeNewChatModal()"></div>
     <div class="modal" id="newChatModal">
       <button class="modal-close" onclick="closeNewChatModal()"><i class="fa fa-times"></i></button>
@@ -786,11 +795,11 @@
       </div>
     </div>
 
-    <!-- ========== HALAMAN: MAPS ========== -->
+    
     <div class="page hidden" id="page-maps">
       <div class="maps-layout">
 
-        <!-- PANEL KIRI: Daftar & Filter -->
+        
         <div class="maps-panel" id="mapsPanel">
           <div class="maps-panel-header">
             <h2><i class="fa fa-map-marker-alt"></i> Psikiater Terdekat</h2>
@@ -800,7 +809,7 @@
             </div>
           </div>
 
-          <!-- Search & Filter -->
+          
           <div class="maps-search-wrap">
             <div class="maps-search-box">
               <i class="fa fa-search"></i>
@@ -814,7 +823,7 @@
             </div>
           </div>
 
-          <!-- Sort & Count -->
+          
           <div class="maps-sort-bar">
             <span id="dokterCount">0 dokter ditemukan</span>
             <select id="sortSelect" onchange="sortDokterList()">
@@ -824,17 +833,17 @@
             </select>
           </div>
 
-          <!-- List Dokter -->
+          
           <div class="maps-dokter-list" id="mapsDokterList">
             <div class="maps-loading"><i class="fa fa-circle-notch fa-spin"></i> Memuat data...</div>
           </div>
         </div>
 
-        <!-- PANEL KANAN: Peta -->
+        
         <div class="maps-map-wrap">
           <div id="mainMap"></div>
 
-          <!-- Tombol aksi di atas peta -->
+          
           <div class="maps-map-controls">
             <button class="map-ctrl-btn" id="btnMyLoc" onclick="goToMyLocation()" title="Ke lokasi saya">
               <i class="fa fa-crosshairs"></i>
@@ -845,7 +854,7 @@
             </button>
           </div>
 
-          <!-- Popup detail dokter di bawah peta -->
+          
           <div class="maps-detail-card hidden" id="mapsDetailCard">
             <button class="detail-close" onclick="closeDokterDetail()"><i class="fa fa-times"></i></button>
             <div class="detail-inner" id="detailInner"></div>
@@ -855,7 +864,7 @@
       </div>
     </div>
 
-    <!-- Modal Detail Dokter (Mobile) -->
+    
     <div class="modal-overlay" id="dokterModalOverlay" onclick="closeDokterModal()"></div>
     <div class="modal dokter-modal" id="dokterModal">
       <button class="modal-close" onclick="closeDokterModal()"><i class="fa fa-times"></i></button>
@@ -863,7 +872,22 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js"></script>
+    <script src="services/core/state/index.js"></script>
+    <script src="services/core/data/index.js"></script>
+    <script src="services/ui/toast/index.js"></script>
+    <script src="services/ui/sidebar/index.js"></script>
+    <script src="services/ui/navigation/index.js"></script>
+    <script src="services/auth/index.js"></script>
+    <script src="services/tes/index.js"></script>
+    <script src="services/matchmaking/index.js"></script>
+    <script src="services/rekomendasi/index.js"></script>
+    <script src="services/jadwal/index.js"></script>
+    <script src="services/chat/index.js"></script>
+    <script src="services/history/index.js"></script>
+    <script src="services/settings/index.js"></script>
+    <script src="services/maps/index.js"></script>
+    <script src="services/dokter/index.js"></script>
+    <script src="services/init/index.js"></script>
 </body>
 
 </html>

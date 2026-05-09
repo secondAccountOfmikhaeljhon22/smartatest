@@ -141,7 +141,6 @@
             margin-bottom: 1.5rem;
         }
 
-        /* NOTIF ITEM */
         .notif-item {
             background: var(--white);
             border-radius: var(--radius);
@@ -318,7 +317,6 @@
             margin: 0;
         }
 
-        /* SYSTEM FEEDBACK SPECIFIC */
         .system-offer {
             display: none;
             background: #f0fdf4;
@@ -361,22 +359,22 @@
         </a>
 
         <div class="nav-menu">
-            <a href="#" class="nav-link">
+            <a href="index.html" class="nav-link">
                 <i class="fa-solid fa-home"></i>
                 <span>Home</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="maps.html" class="nav-link">
                 <i class="fa-solid fa-user-doctor"></i>
                 <span>Cari Tenaga Ahli</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="article.html" class="nav-link">
                 <i class="fa-solid fa-newspaper"></i>
                 <span>Artikel</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="profiles.html" class="nav-link">
                 <i class="fa-solid fa-gamepad"></i>
                 <span>Game</span>
             </a>
@@ -429,7 +427,7 @@
                         <p>Rating Dokter Terkirim!</p>
                     </div>
 
-                    <!-- System Feedback Offer (Hidden Initially) -->
+                    
                     <div class="system-offer" id="system-feedback-area">
                         <h5>Bantu Kami Berkembang</h5>
                         <p>Bagaimana pengalaman Anda menggunakan aplikasi MindCheck hari ini?</p>
@@ -460,14 +458,12 @@
             mainBadge.innerText = badgeCount;
         }
 
-        // Async entry
         let idx = 0;
         const interval = setInterval(() => {
             if (idx < dummyData.length) { pushNotif(dummyData[idx]); idx++; }
             else { clearInterval(interval); }
         }, 1000);
 
-        // Interaction Logic
         function handleStar(n) {
             const stars = document.querySelectorAll('.star-row i');
             stars.forEach((s, i) => i < n ? s.classList.add('active') : s.classList.remove('active'));
@@ -477,12 +473,10 @@
         function submitDocRating() {
             if (!window.docScore) return alert("Pilih bintang dulu.");
 
-            // Sembunyikan form dokter, tampilkan sukses sebentar
             document.getElementById('doctor-feedback-form').style.display = 'none';
             const docSuccess = document.getElementById('doc-success');
             docSuccess.style.display = 'block';
 
-            // Setelah 1.5 detik, tawarkan feedback sistem
             setTimeout(() => {
                 docSuccess.style.display = 'none';
                 document.getElementById('system-feedback-area').style.display = 'block';
@@ -495,7 +489,6 @@
         }
 
         function closeSystemFeedback() {
-            // Animasi menghilang sederhana untuk menolak
             const area = document.getElementById('system-feedback-area');
             area.style.opacity = '0';
             setTimeout(() => area.style.display = 'none', 300);
