@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCheck Indonesia — Feedback System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --green: #22c55e;
+            --green-dark: #16a34a;
+            --green-light: #dcfce7;
+            --navy: #0f172a;
+            --dark: #1e293b;
+            --mid: #334155;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gray: #94a3b8;
+            --gray-light: #e2e8f0;
+            --danger: #ef4444;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Plus Jakarta Sans', sans-serif;
+            --font-display: 'Fraunces', serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--light);
+            color: var(--dark);
+            margin: 0;
+        }
+
+        /* NAVBAR */
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--mid);
+            text-decoration: none;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--green-dark);
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0%;
+            height: 2px;
+            background: var(--green);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 70px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .nav-right {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-bell {
+            font-size: 1.4rem;
+            color: var(--mid);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--white);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+        }
+
+        .notif-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 1rem;
+            animation: slideUp 0.5s ease forwards;
+            border-left: 4px solid transparent;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notif-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .type-msg {
+            border-left-color: #3b82f6;
+        }
+
+        .type-msg .notif-icon {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+
+        .type-approve {
+            border-left-color: var(--green);
+        }
+
+        .type-approve .notif-icon {
+            background: var(--green-light);
+            color: var(--green-dark);
+        }
+
+        .type-rate {
+            border-left-color: #f97316;
+        }
+
+        .type-rate .notif-icon {
+            background: #fff7ed;
+            color: #f97316;
+        }
+
+        .notif-body {
+            flex: 1;
+        }
+
+        .notif-title {
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .notif-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* FEEDBACK SECTIONS */
+        .feedback-area {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--gray-light);
+        }
+
+        .star-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .star-row i {
+            font-size: 1.5rem;
+            color: var(--gray-light);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .star-row i.active {
+            color: #fbbf24;
+        }
+
+        .feedback-input {
+            width: 100%;
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-family: var(--font);
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-send {
+            background: var(--navy);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-skip {
+            background: transparent;
+            color: var(--gray);
+            border: 1px solid var(--gray-light);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-send:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-skip:hover {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .status-msg {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .status-msg i {
+            color: var(--green);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .status-msg p {
+            font-weight: 700;
+            color: var(--green-dark);
+            margin: 0;
+        }
+
+        .system-offer {
+            display: none;
+            background: #f0fdf4;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .system-offer h5 {
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+            color: var(--navy);
+        }
+
+        .system-offer p {
+            margin: 0 0 12px 0;
+            font-size: 0.8rem;
+            color: var(--mid);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+            <i class="fa-solid fa-hand-holding-heart" style="color: var(--green);"></i>
+            <span>MindCheck</span>
+        </a>
+
+        <div class="nav-menu">
+            <a href="index.html" class="nav-link">
+                <i class="fa-solid fa-home"></i>
+                <span>Home</span>
+            </a>
+
+            <a href="maps.html" class="nav-link">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span>Cari Tenaga Ahli</span>
+            </a>
+
+            <a href="article.html" class="nav-link">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Artikel</span>
+            </a>
+
+            <a href="profiles.html" class="nav-link">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Game</span>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <i class="fa-solid fa-bell nav-bell"></i>
+            <div class="badge" id="main-badge">0</div>
+        </div>
+    </nav>
+    <main class="container">
+        <div class="section-header">
+            <h2>Notifikasi</h2>
+        </div>
+        <div id="notif-list"></div>
+    </main>
+
+    <script>
+        const notifList = document.getElementById('notif-list');
+        const mainBadge = document.getElementById('main-badge');
+        let badgeCount = 0;
+
+        const dummyData = [
+            { type: 'type-msg', icon: 'fa-user-doctor', label: 'Pesan Baru', text: '2 pesan terbaru dari <strong>Dr. Ratna Dewi, Sp.KJ</strong>' },
+            { type: 'type-approve', icon: 'fa-calendar-check', label: 'Permohonan Disetujui', text: 'Ajuan Anda disetujui untuk menindaklanjuti, pertemuan secara langsung.' },
+            { type: 'type-rate', icon: 'fa-comment-medical', label: 'Sesi Selesai', text: 'Sesi chat online telah berakhir, ingin berikan rating?', hasRating: true }
+        ];
+
+        function pushNotif(data) {
+            const card = document.createElement('div');
+            card.className = `notif-item ${data.type}`;
+
+            let ratingHTML = '';
+            if (data.hasRating) {
+                ratingHTML = `
+                    <div class="feedback-area" id="doctor-feedback-form">
+                        <div class="star-row">
+                            <i class="fa-solid fa-star" onclick="handleStar(1)"></i>
+                            <i class="fa-solid fa-star" onclick="handleStar(2)"></i>
+                            <i class="fa-solid fa-star" onclick="handleStar(3)"></i>
+                            <i class="fa-solid fa-star" onclick="handleStar(4)"></i>
+                            <i class="fa-solid fa-star" onclick="handleStar(5)"></i>
+                        </div>
+                        <textarea class="feedback-input" id="doc-text" rows="2" placeholder="Tulis masukan untuk dokter..."></textarea>
+                        <button class="btn-send" onclick="submitDocRating()">Kirim Penilaian</button>
+                    </div>
+
+                    <div class="status-msg" id="doc-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <p>Rating Dokter Terkirim!</p>
+                    </div>
+
+                    
+                    <div class="system-offer" id="system-feedback-area">
+                        <h5>Bantu Kami Berkembang</h5>
+                        <p>Bagaimana pengalaman Anda menggunakan aplikasi MindCheck hari ini?</p>
+                        <textarea class="feedback-input" id="sys-text" rows="2" placeholder="Saran untuk aplikasi..."></textarea>
+                        <div class="btn-group">
+                            <button class="btn-send" onclick="submitSysRating()">Kirim Saran</button>
+                            <button class="btn-skip" onclick="closeSystemFeedback()">Mungkin Nanti</button>
+                        </div>
+                    </div>
+
+                    <div class="status-msg" id="final-success">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <p>Terima kasih atas dukungannya!</p>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="notif-icon"><i class="fa-solid ${data.icon}"></i></div>
+                <div class="notif-body">
+                    <span class="notif-label">${data.label}</span>
+                    <p class="notif-text">${data.text}</p>
+                    ${ratingHTML}
+                </div>
+            `;
+            notifList.prepend(card);
+            badgeCount++;
+            mainBadge.innerText = badgeCount;
+        }
+
+        let idx = 0;
+        const interval = setInterval(() => {
+            if (idx < dummyData.length) { pushNotif(dummyData[idx]); idx++; }
+            else { clearInterval(interval); }
+        }, 1000);
+
+        function handleStar(n) {
+            const stars = document.querySelectorAll('.star-row i');
+            stars.forEach((s, i) => i < n ? s.classList.add('active') : s.classList.remove('active'));
+            window.docScore = n;
+        }
+
+        function submitDocRating() {
+            if (!window.docScore) return alert("Pilih bintang dulu.");
+
+            document.getElementById('doctor-feedback-form').style.display = 'none';
+            const docSuccess = document.getElementById('doc-success');
+            docSuccess.style.display = 'block';
+
+            setTimeout(() => {
+                docSuccess.style.display = 'none';
+                document.getElementById('system-feedback-area').style.display = 'block';
+            }, 1500);
+        }
+
+        function submitSysRating() {
+            document.getElementById('system-feedback-area').style.display = 'none';
+            document.getElementById('final-success').style.display = 'block';
+        }
+
+        function closeSystemFeedback() {
+            const area = document.getElementById('system-feedback-area');
+            area.style.opacity = '0';
+            setTimeout(() => area.style.display = 'none', 300);
+        }
+    </script>
+</body>
+
+</html>
